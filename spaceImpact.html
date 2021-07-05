@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        canvas {
+            border-style: solid;
+            border-width: 10px;
+            padding: 0;
+            margin: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="imgpos" width="500" height="500"></canvas>
+
+    <script>
+        //Canvas--------------------------------------
+        var cnv = document.querySelector("canvas");
+        var ctx = cnv.getContext("2d");
+        //Canvas--------------------------------------
+
+
+        //Recebendo as imagens-----------------------
+        const background = new Image();
+        background.src = "./background.png";
+
+        const shipImage = new Image();
+        shipImage.src = "./ship.png";
+
+        const shipShot = new Image();
+        shipShot.src = "./foguinho.png";
+
+        const enemie = new Image();
+        enemie.src = "./aviao.png"
+        //Recebendo as imagens-----------------------
+
+        //Objetos------------------------------------
+        var ship = {
+            x: 10,
+            y: 10
+        };
+
+        var airplane = {
+            x: 400,
+            y: 40
+        };
+        //Objetos------------------------------------
+
+        //Funções------------------------------------
+        var UP = 38, DOWN = 40, LEFT = 37, RIGHT = 39, shot = 32;
+        window.addEventListener("keydown", keydownHandler,);
+        function keydownHandler(e){
+            var key = e.keyCode;
+            if(key === LEFT){
+                ship.x-=20;
+            }
+            else if(key === UP){
+                ship.y-=20;
+            }
+            else if(key === DOWN){
+                ship.y+=20;
+            }
+            else if(key === RIGHT){
+                ship.x+=20;
+            } else if (key == shot){
+                shot.x += 10
+            }
+            
+        }
+
+        var speed = 7
+        function moveEnemie() {
+            airplane.y += speed;
+            if (airplane.y > cnv.height - 50 || airplane.y < 0) {
+                speed *= -1
+            }
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, cnv.width, cnv.height);
+            ctx.drawImage(background, 0, 0, cnv.width, cnv.height);
+            ctx.drawImage(shipImage, ship.x, ship.y, 75, 75);
+            ctx.drawImage(enemie, airplane.x, airplane.y, 75, 75);
+        }
+        function roda() {
+                    moveEnemie();
+                    render();
+                    
+                    window.requestAnimationFrame(roda);
+        }
+        roda()
+        //Funções------------------------------------
+    </script>
+</body>
+
+</html>
