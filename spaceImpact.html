@@ -9,17 +9,67 @@
 
     <style>
         canvas {
-            border-style: solid;
-            border-width: 10px;
-            padding: 0;
             margin: auto;
             display: block;
         }
     </style>
+
+    <script src='teclado.js'></script>
+    <script src='animacao.js'></script>
+    <script src='folhaSprite.js'></script>
+    <script src='entedidades.js'></script>
+    <script src='colisor.js'></script>
+    <script src='ClassesNave.js'></script>
+    <script src='background.js'></script>
 </head>
 
 <body>
-    <script src='spaceImpact.js'></script>
+    <script>
+        //Criando o canvas=====================================================
+        cnv = document.createElement("canvas");
+        cnv.width = 748;
+        cnv.height = 421;
+        document.body.appendChild(cnv);
+        ctx = cnv.getContext("2d");
+
+        //Inicializando os objetos=============================================
+        let animation = new Animation(ctx);
+        let keyboard = new Keyboard(document);
+        let colisor = new Colisor();
+        animation.newProcess(colisor)
+        keyboard.shooted(enter, pause)
+
+        //Carregando as imagens================================================
+        const zoiudaoImage = new Image();
+        zoiudaoImage.src = "zoiudo_sprirte_sheet.png";
+        zoiudaoImage.onload = loaded();
+
+        const aguosoImg = new Image();
+        aguosoImg.src = 'aguoso.png'
+        aguosoImg.onload = loaded();
+
+        const shipImage = new Image();
+        shipImage.src = "nave_spriteSheet.png";
+        shipImage.onload = loaded();
+        
+        const backgroundImg = new Image();
+        backgroundImg.src = 'backgound.jpg'
+        backgroundImg.onload = loaded();
+
+        //Criação dos personagens==============================================
+        let background = new Background(ctx, backgroundImg);
+        animation.newSprite(background)
+
+        let ship = new Hero(ctx, animation, keyboard, shipImage);
+        animation.newSprite(ship);
+        colisor.newSprite(ship)
+        keyboard.shooted(space, function() {ship.shoot();});
+
+        //Instruções da fase====================================================
+        let zoiudao = new Zoiudao (ctx, zoiudaoImage, 600, 250);
+        animation.newSprite(zoiudao);
+        colisor.newSprite(zoiudao);
+    </script>
 </body>
 
 </html>

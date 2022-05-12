@@ -47,7 +47,8 @@ let ship = {
         }},
 
     draw: function () {
-        ctx.drawImage(shipImage,
+        ctx.drawImage(
+            shipImage,
             this.imgStateX[Math.trunc(this.iX)],this.imgStateY[this.iY],
             this.imageWidth, this.imageHeight,
             this.x, this.y,
@@ -68,30 +69,42 @@ let zoiudao = {
     imgStateY: [0, 108, 216],
     iX: 0,
     iY:0,
-    speed: 4,
+    speed: 100,
 
     move: function() {
-        this.y += this.speed;
+        let agora = new Date().getTime()
+        let decorrido = anterior - agora
+        anterior = agora
+
+        this.y -= this.speed * decorrido/1000
         if (this.y > cnv.height - 110 || this.y < 0) {
             this.speed *= -1;
         }},
 
     draw: function () {
+        ctx.save()
         ctx.drawImage(
             zoiudaoImage,
             this.imgStateX[Math.trunc(this.iX)], this.imgStateY[this.iY],
             this.imageWidth, this.imageHeight, 
             this.x, this.y, 
             this.imageWidth, this.imageHeight);
+        ctx.restore()
     }, 
 
     update: function () {
+        let agora = new Date().getTime()
+        let decorrido = anterior - agora
+        anterior = agora
+
         if (this.iX >= 2) {
             this.iX = 0 
-            this.iY > 3 ? this.iY = 0 : this.iY++
+            this.iY > 2 ? this.iY = 0 : this.iY++
         } else {                        
-           this.iX += 0.05
+           this.iX += 0.5 * (-decorrido)
         }
+
+        
     }};
 //Cenário-------------------------------------------------------------------------
 let background = {
@@ -121,7 +134,6 @@ let background = {
     },
 
     update: function() {
-        console.log(frame)
     }};
 
 
@@ -130,7 +142,6 @@ function main () {
     cnv = document.createElement("canvas");
     cnv.width = 850;
     cnv.height = 420;
-    cnv.style.border = "1px solid #000";
     document.body.appendChild(cnv);
     ctx = cnv.getContext("2d");
     //Canvas---------------------------------------------------------
@@ -144,8 +155,8 @@ function main () {
 function render() {
     ctx.clearRect(0, 0, cnv.width, cnv.height);
     background.draw();
-    ship.draw();
     zoiudao.draw();
+    ship.draw();
 }
 
 //Função de loop===============================================================
